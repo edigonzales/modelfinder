@@ -12,15 +12,19 @@ public class StartupIndexer implements ApplicationRunner {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
     private final IndexingProperties properties;
+    private final RemoteReaderService remoteReaderService; // wird wieder entfernt
     
-    public StartupIndexer(IndexingProperties properties) {
+    public StartupIndexer(IndexingProperties properties, RemoteReaderService remoteReaderService) {
         this.properties = properties;
+        this.remoteReaderService = remoteReaderService;
     }
     
     @Override
     public void run(ApplicationArguments args) throws Exception {
         
         log.info(properties.toString());
+        
+        remoteReaderService.fetchData("foo");
     }
 
 }
