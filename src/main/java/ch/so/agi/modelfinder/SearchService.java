@@ -20,6 +20,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class SearchService {
@@ -55,19 +57,35 @@ public class SearchService {
     // tools/IliVErrors.ili
 
     
-    
-    public Document getDocumentById(String serverUrl, String file) {
+    // http://localhost:8080/models?serverUrl=https://models.interlis.ch&file=tools/IliVErrors.ili
         
-        
-        
-        return null;
+    public Optional<ModelMetadata> getDocumentById(String serverUrl, String file) {
+        try (IndexReader reader = DirectoryReader.open(directory)) {
+            IndexSearcher searcher = new IndexSearcher(reader);
+
+            Term serverUrlTerm = new Term("serverUrl", serverUrl);
+            Term fileTerm = new Term("file_exact", file);
+            
+            BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+            queryBuilder.add(new TermQuery(serverUrlTerm), BooleanClause.Occur.MUST);
+            queryBuilder.add(new TermQuery(fileTerm), BooleanClause.Occur.MUST);
+            
+            TopDocs results = searcher.search(queryBuilder.build(), 1);
+            
+            if (results.scoreDocs.length > 0) {
+                Document document = searcher.storedFields().document(results.scoreDocs[0].doc);
+                ModelMetadata metadata = mapDocument(document);
+                return Optional.of(metadata);
+            }
+        } catch (IOException e) {
+            log.error("Error searching Lucene index", e);
+            throw new RuntimeException("Search failed", e);
+        }
+        return Optional.empty();
     }
     
-    
-    public List<Document> getDocumentsByQuery(String queryString, int limit) {
+    public Optional<List<ModelMetadata>> getDocumentsByQuery(String queryString, int limit) {
         Query query;
-        TopDocs documents;
-
 
         if (queryString == null || queryString.trim().isEmpty()) {
             query = new MatchAllDocsQuery();
@@ -103,32 +121,47 @@ public class SearchService {
             Query tmpQuery = queryParser.parse(luceneQueryString);
             query = FunctionScoreQuery.boostByValue(tmpQuery, DoubleValuesSource.fromDoubleField("boost"));
 
-            documents = searcher.search(query, limit);
+            TopDocs results = searcher.search(query, limit);
+            
+            if (results.scoreDocs.length == 0) {
+                return Optional.empty();
+            }
 
-            List<Map<String, String>> result = new LinkedList<Map<String, String>>();
-            for (ScoreDoc scoreDoc : documents.scoreDocs) {
+            List<ModelMetadata> metadataList = new ArrayList<>();
+            for (ScoreDoc scoreDoc : results.scoreDocs) {
                 Document document = searcher.storedFields().document(scoreDoc.doc);
-                System.out.println(document.get("name"));
-                System.out.println(document.get("serverUrl"));
-                System.out.println(document.get("file"));
-                System.out.println(scoreDoc.score);
-
-//                Explanation explanation = searcher.explain(query, scoreDoc.doc);
-//                log.debug(explanation.toString());
-                
-                Map<String, String> docMap = new HashMap<String, String>();
-                List<IndexableField> fields = document.getFields();
-                for (IndexableField field : fields) {
-                    docMap.put(field.name(), field.stringValue());
-                }
-                result.add(docMap);
+                ModelMetadata metadata = mapDocument(document);
+                metadataList.add(metadata);
             }
             
-            return null;
+            return Optional.of(metadataList);
         } catch (IOException | ParseException e) {
             log.error("Error searching Lucene index", e);
             throw new RuntimeException("Search failed", e);
         }
+    }
+    
+    private ModelMetadata mapDocument(Document document) {
+        ModelMetadata metadata = new ModelMetadata(
+                document.get("serverUrl"),
+                document.get("name"),
+                document.get("dispName"),
+                document.get("shortDescription"),
+                document.get("version"),
+                document.get("file"),
+                document.get("schemaLanguage"),
+                document.get("issuer"),
+                document.get("precursorVersion"),
+                document.get("technicalContact"),
+                document.get("furtherInformation"),
+                document.get("md5"),
+                document.get("tags"),
+                document.get("idGeoIV"),
+                document.get("organisationName"),
+                document.get("organisationAbbreviation"),
+                null
+                );
+        return metadata;
     }
     
     public record SearchResult(

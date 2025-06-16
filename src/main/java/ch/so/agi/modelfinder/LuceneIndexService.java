@@ -33,7 +33,8 @@ public class LuceneIndexService {
         String serverUrl = models.get(0).serverUrl();
         
         try {            
-            log.debug("deleting: " + serverUrl);
+            log.debug("Deleting: " + serverUrl);
+            
             Term term = new Term("serverUrl", serverUrl);
             TermQuery query = new TermQuery(term);
             indexWriter.deleteDocuments(query );

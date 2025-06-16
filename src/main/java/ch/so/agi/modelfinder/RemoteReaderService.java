@@ -49,7 +49,7 @@ public class RemoteReaderService {
                 ModelMetadata modelMetadataRecord = new ModelMetadata(
                         serverUrl,
                         modelMetadata.getName(),
-                        modelMetadata.getName() + "(" + modelMetadata.getVersion() + ")",
+                        modelMetadata.getName() + " (" + modelMetadata.getVersion() + ")",
                         modelMetadata.getShortDescription(),
                         modelMetadata.getVersion(),
                         modelMetadata.getFile(),
