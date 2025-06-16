@@ -24,9 +24,7 @@ public class SearchController {
     // /models?q=xxxx
     // /models/serverUrl/file ? geht das wegen url? encoden? dito ja auch file.
     @GetMapping("/search")
-    public List<?> search(
-        @RequestParam(value = "query", required = false) String queryString
-    ) {
-        return searchService.search(queryString, properties.queryMaxRecords());
+    public List<?> search(@RequestParam(value = "query", required = false) String queryString) {
+        return searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords());
     }
 }

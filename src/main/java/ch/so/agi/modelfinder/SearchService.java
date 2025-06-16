@@ -50,8 +50,21 @@ public class SearchService {
     }
     
     // https://chat.deepseek.com/a/chat/s/94ab1ea4-9dd1-463a-855f-6b224b836ccb
+    // IliVErrors
+    // https://models.interlis.ch
+    // tools/IliVErrors.ili
+
     
-    public List<Document> search(String queryString, int limit) {
+    
+    public Document getDocumentById(String serverUrl, String file) {
+        
+        
+        
+        return null;
+    }
+    
+    
+    public List<Document> getDocumentsByQuery(String queryString, int limit) {
         Query query;
         TopDocs documents;
 
@@ -96,6 +109,8 @@ public class SearchService {
             for (ScoreDoc scoreDoc : documents.scoreDocs) {
                 Document document = searcher.storedFields().document(scoreDoc.doc);
                 System.out.println(document.get("name"));
+                System.out.println(document.get("serverUrl"));
+                System.out.println(document.get("file"));
                 System.out.println(scoreDoc.score);
 
 //                Explanation explanation = searcher.explain(query, scoreDoc.doc);

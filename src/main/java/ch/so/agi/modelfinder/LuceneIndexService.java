@@ -47,6 +47,7 @@ public class LuceneIndexService {
                 doc.add(new TextField("shortDescription", nullable(metadata.shortDescription()), Field.Store.YES));
                 doc.add(new TextField("version", metadata.version(), Field.Store.YES));
                 doc.add(new TextField("file", nullable(metadata.file()), Field.Store.YES));
+                doc.add(new StringField("file_exact", nullable(metadata.file()), Field.Store.NO)); // For exact searches
                 doc.add(new StringField("schemaLanguage", nullable(metadata.schemaLanguage()), Field.Store.YES));
                 doc.add(new TextField("issuer", nullable(metadata.issuer()), Field.Store.YES));
                 doc.add(new TextField("precursorVersion", nullable(metadata.precursorVersion()), Field.Store.YES));
