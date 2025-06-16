@@ -10,5 +10,7 @@ import org.springframework.stereotype.Component;
 public record IndexingProperties(
         boolean reindexOnStartup,
         int intervalHours,
-        List<String> repositories
+        List<String> repositories,
+        String directory,
+        int queryMaxRecords
     ) {}

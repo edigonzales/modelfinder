@@ -32,6 +32,9 @@ dependencies {
     
     implementation 'ch.interlis:ili2c-tool:5.6.4'
     implementation 'ch.interlis:ili2c-core:5.6.4'
+    
+    implementation 'org.apache.lucene:lucene-core:10.2.1'
+    implementation 'org.apache.lucene:lucene-queryparser:10.2.1'
 }
 
 jte {

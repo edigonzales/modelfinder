@@ -11,20 +11,18 @@ import org.slf4j.LoggerFactory;
 public class StartupIndexer implements ApplicationRunner {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
+    private final IndexingService indexingService;
     private final IndexingProperties properties;
-    private final RemoteReaderService remoteReaderService; // wird wieder entfernt
     
-    public StartupIndexer(IndexingProperties properties, RemoteReaderService remoteReaderService) {
+    public StartupIndexer(IndexingService indexingService, IndexingProperties properties) {
+        this.indexingService = indexingService;
         this.properties = properties;
-        this.remoteReaderService = remoteReaderService;
     }
     
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        
-        log.info(properties.toString());
-        
-        remoteReaderService.fetchData("foo");
+    public synchronized void run(ApplicationArguments args) throws Exception {
+        if (properties.reindexOnStartup()) {
+            indexingService.performFullIndex();
+        }        
     }
-
 }
