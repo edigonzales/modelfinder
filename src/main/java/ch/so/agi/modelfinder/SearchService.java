@@ -31,6 +31,7 @@ import org.apache.lucene.search.BooleanClause;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -132,6 +133,12 @@ public class SearchService {
                 Document document = searcher.storedFields().document(scoreDoc.doc);
                 ModelMetadata metadata = mapDocument(document);
                 metadataList.add(metadata);
+            }
+            
+            //if (sortByName) {
+            if (true) {
+                metadataList.sort(Comparator.comparing(ModelMetadata::name, 
+                    String.CASE_INSENSITIVE_ORDER));
             }
             
             return Optional.of(metadataList);
