@@ -75,7 +75,7 @@ public class SearchService {
             
             if (results.scoreDocs.length > 0) {
                 Document document = searcher.storedFields().document(results.scoreDocs[0].doc);
-                ModelMetadata metadata = mapDocument(document);
+                ModelMetadata metadata = mapDocument(document, true);
                 return Optional.of(metadata);
             }
         } catch (IOException e) {
@@ -86,15 +86,6 @@ public class SearchService {
     }
     
     public Optional<List<ModelMetadata>> getDocumentsByQuery(String queryString, int limit) {
-        Query query;
-
-        if (queryString == null || queryString.trim().isEmpty()) {
-            query = new MatchAllDocsQuery();
-        } else {
-            queryParser = new QueryParser("name", analyzer);
-            queryParser.setAllowLeadingWildcard(true);
-        }
-
         try (IndexReader reader = DirectoryReader.open(directory)) {
             IndexSearcher searcher = new IndexSearcher(reader);
 
@@ -108,7 +99,7 @@ public class SearchService {
                         + "file:*" + token + "* OR "
                         + "title:*" + token + "* OR "
                         + "issuer:*" + token + "* OR "
-                        + "organisation:*" + token + "* OR "
+                        //+ "organisation:*" + token + "* OR "
                         + "technicalContact:*" + token + "* OR "
                         + "furtherInformation:*" + token + "* OR "
                         + "idGeoIV:" + token + "*^20";
@@ -119,9 +110,17 @@ public class SearchService {
             }
             log.debug(luceneQueryString);
             
-            Query tmpQuery = queryParser.parse(luceneQueryString);
-            query = FunctionScoreQuery.boostByValue(tmpQuery, DoubleValuesSource.fromDoubleField("boost"));
-
+            Query query;
+            if (queryString == null || queryString.trim().isEmpty()) {
+                query = new MatchAllDocsQuery();
+            } else {
+                queryParser = new QueryParser("name", analyzer);
+                queryParser.setAllowLeadingWildcard(true);
+                
+                Query tmpQuery = queryParser.parse(luceneQueryString);
+                query = FunctionScoreQuery.boostByValue(tmpQuery, DoubleValuesSource.fromDoubleField("boost"));                
+            }
+            
             TopDocs results = searcher.search(query, limit);
             
             if (results.scoreDocs.length == 0) {
@@ -149,6 +148,10 @@ public class SearchService {
     }
     
     private ModelMetadata mapDocument(Document document) {
+        return mapDocument(document, false);
+    }
+    
+    private ModelMetadata mapDocument(Document document, boolean addModelContent) {
         ModelMetadata metadata = new ModelMetadata(
                 document.get("serverUrl"),
                 document.get("name"),
@@ -166,7 +169,7 @@ public class SearchService {
                 document.get("idGeoIV"),
                 document.get("organisationName"),
                 document.get("organisationAbbreviation"),
-                null
+                addModelContent ? document.get("modelContent") : null
                 );
         return metadata;
     }

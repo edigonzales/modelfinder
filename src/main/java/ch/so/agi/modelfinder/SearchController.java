@@ -40,7 +40,22 @@ public class SearchController {
         
     // noch nicht fertig. ich kann hier alles reinpacken q=, nichts, nur serverUrl= aber nicht nur file=
     @GetMapping("/models")
-    public ResponseEntity<?> getModels(@RequestParam(value = "serverUrl", required = false) String serverUrl, @RequestParam(value = "file", required = false) String file) {        
+    public ResponseEntity<?> getModels(
+            @RequestParam(value = "query", required = false) String queryString, 
+            @RequestParam(value = "serverUrl", required = false) String serverUrl, 
+            @RequestParam(value = "file", required = false) String file
+            ) {        
+        
+        if (serverUrl == null && file == null) {
+            return searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords())
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.noContent().build());
+        }
+        
+        
+        
+        // return: eher empty list? -> einfacher für den client event. htmx?
+        
         return searchService.getDocumentById(serverUrl, file)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());   
