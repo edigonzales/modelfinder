@@ -15,10 +15,10 @@
     <title>INTERLIS Model Finder • Kanton Solothurn</title>
     
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.2.1/dist/js/materialize.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.2.1/dist/js/materialize.min.js"></script>-->
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.2.1/dist/css/materialize.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.2.1/dist/css/materialize.min.css">-->
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="modelfinder.css">
 
@@ -31,16 +31,32 @@
         </div>
 
         <div style="margin-top:120px; margin-bottom:30px;">
+        <!--
             <div class="s12 m6 input-field">
                 <div class="prefix"><i class="material-icons">search</i></div>
                 <div class="suffix" hx-on:click="document.querySelector('#search-input').value = ''; htmx.trigger('#search-input', 'input');"><i class="material-icons">clear</i></div>
                 <input id="search-input" placeholder=" " type="text" autocomplete="off"
                 name="search" 
-                hx-post="/search"
+                hx-get="search"
                 hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
                 hx-target="#search-results">
                 <label for="search-input">Search for INTERLIS models...</label>    
             </div>
+        -->
+        <div >
+            <input  class="my-input" border="0"
+                type="text" 
+                name="query" 
+                hx-get="/models" 
+                hx-target="#results" 
+                hx-trigger="keyup changed delay:300ms"
+                <!--hx-headers='{"Accept": "text/html"}'--> 
+                autocomplete="off" 
+                placeholder="Search..." />
+       </div>     
+            <div id="results"></div>
+        
+        
         </div>
 
 

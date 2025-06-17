@@ -135,10 +135,10 @@ public class SearchService {
             }
             
             //if (sortByName) {
-            if (true) {
-                metadataList.sort(Comparator.comparing(ModelMetadata::name, 
-                    String.CASE_INSENSITIVE_ORDER));
-            }
+//            if (true) {
+//                metadataList.sort(Comparator.comparing(ModelMetadata::name, 
+//                    String.CASE_INSENSITIVE_ORDER));
+//            }
             
             return Optional.of(metadataList);
         } catch (IOException | ParseException e) {
