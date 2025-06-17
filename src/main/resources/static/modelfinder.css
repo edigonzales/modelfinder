@@ -1,0 +1,197 @@
+html, body,
+button, input, optgroup, select, textarea {
+    font-family: Frutiger, system-ui, Roboto, sans;
+    color: #333333;
+    font-size: 16px;
+}
+
+.input-field input[type=text] {
+    /*background-color: rgb(245, 245, 245);*/
+    background-color: #F4F4F4;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label {
+    color: rgb(198, 40, 40);
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid rgb(198, 40, 40);
+    /*box-shadow: 0 1px 0 0 #333333;*/
+}
+/* valid color */
+.input-field input[type=text].valid {
+    border-bottom: 1px solid #333333;
+    box-shadow: 0 1px 0 0 #333333;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+table th {
+  letter-spacing: .1em;
+}
+
+tr {
+	height: 56px;
+}
+
+th, td {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    padding-right: 16px;
+    padding-bottom: 20px;
+    padding-left: 16px;
+    vertical-align: top;
+    text-align: left;
+    background-color: white;
+}
+
+tr.hidden td {
+    background-color: white;
+    border-top: 0px solid white;
+    padding-top: 10px;
+    padding-right: 16px;
+    padding-bottom: 12px;
+    padding-left: 16px;
+}
+
+thead tr th {
+  border-top: 0px solid white;
+}
+
+tr:hover td {background:#eeeeee;}
+
+.hidden {
+    display: none;
+}
+
+.expanded {
+    display: table-row;
+}
+
+/*
+.multi-line-ellipsis {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+*/
+
+.container {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+#product_detail > p {
+    margin-top: 50px;     
+}
+*/
+
+.red-link {
+    overflow: hidden;
+    color: rgb(198, 40, 40);  
+}
+
+a.red-link:hover {
+    color: rgb(198, 40, 40);
+    text-decoration: underline;
+}  
+
+a.red-link:visited {
+    color: rgb(198, 40, 40); 
+}
+
+a:link {
+    color: rgb(198, 40, 40); 
+}
+
+a:visited {
+    color: rgb(198, 40, 40); 
+}
+
+a:hover {
+    color: rgb(198, 40, 40); 
+}
+
+a:active {
+    color: rgb(198, 40, 40); 
+} 
+
+.black-link {
+    overflow: hidden;
+    color: #333333; 
+}
+
+a.black-link:hover {
+    color: #333333;
+}  
+
+a.black-link:visited {
+    color: #333333; 
+}  
+
+.textedit-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.textedit-label {
+  font-size: 0.75rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
+
+.textedit-display {
+  border-radius: 4px;
+  background-color: #F4F4F4;
+  /*background-color: #eaeaea;*/
+  padding: 1.0rem 0.75rem;
+  /*min-height: 3rem;*/
+  font-size: 1rem;
+  color: #333;
+  cursor: default;
+}
+
+.textedit-display-area {
+    min-height: 100px;
+}
+
+.textedit-display-line {
+    min-height: 20px;
+}
+
+.textedit-display-badge {
+	min-height: 30px;
+}
+
+/*
+.textedit-display a {
+  color: #0077cc;
+  text-decoration: underline;
+}
+*/
+
+.badge {
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgb(198, 40, 40);
+  border: 1.5px solid rgb(198, 40, 40);
+  border-radius: 12px;
+  background: transparent;
+  user-select: none;
+}
+
+mapml-viewer {
+    width: 100%;
+}

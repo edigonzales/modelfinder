@@ -1,14 +1,19 @@
 package ch.so.agi.modelfinder;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class SearchController {
@@ -22,23 +27,7 @@ public class SearchController {
         this.properties = properties;
     }
     
-    // Ggf Endpunkt umbenennen, da wir einen weiteren für den Modelcontent benötigen.
-    // /models?q=xxxx -> zusammenlegen
-    
-    
-    // Sortieren!!! Wo?
-    
-    @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(value = "query", required = false) String queryString) {
-        return searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords())
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());   
-    }
-    
-    
-    // http://localhost:8080/models?serverUrl=https://models.interlis.ch&file=tools/IliVErrors.ili
-        
-    // noch nicht fertig. ich kann hier alles reinpacken q=, nichts, nur serverUrl= aber nicht nur file=
+    // http://localhost:8080/models?serverUrl=https://models.interlis.ch&file=tools/IliVErrors.ili    
     @GetMapping("/models")
     public ResponseEntity<?> getModels(
             @RequestParam(value = "query", required = false) String queryString, 
@@ -50,10 +39,7 @@ public class SearchController {
             return searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords())
                     .map(ResponseEntity::ok)
                     .orElseGet(() -> ResponseEntity.noContent().build());
-        }
-        
-        
-        
+        } 
         // return: eher empty list? -> einfacher für den client event. htmx?
         
         return searchService.getDocumentById(serverUrl, file)
