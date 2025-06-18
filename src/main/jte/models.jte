@@ -34,7 +34,7 @@
                     name="query" 
                     hx-get="models" 
                     hx-target="#results" 
-                    hx-trigger="keyup changed delay:300ms"
+                    hx-trigger="input keyup changed delay:300ms"
                     hx-headers='{"Accept": "text/html"}' 
                     autocomplete="off" 
                     placeholder="Search for INTERLIS models..." />
@@ -43,7 +43,7 @@
         </div>
 
         <div id="results"></div>
-           
+
     </div>
 </body>
 </html>

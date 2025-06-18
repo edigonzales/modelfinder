@@ -24,10 +24,8 @@ public class IndexingService {
     
     public void performFullIndex() {
         properties.repositories().forEach(server -> {
-            System.out.println(server);
             Optional<List<ModelMetadata>> data = readerService.fetchData(server);
             data.ifPresent(indexService::index);
         });
-    }
-    
+    }    
 }
