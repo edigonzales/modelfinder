@@ -38,7 +38,7 @@
                     <td>${metadata.version()}</td>
                     <td>${metadata.schemaLanguage().substring(3).replace("_", ".")}</td>
                     <td>
-                        <a href="models?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}" target="_blank">
+                        <a href="modelmetadata?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}" target="_blank">
                             <i class="bi bi-info-circle" style="font-size: 1.2rem;"></i>                        
                         </a>
                     </td>
