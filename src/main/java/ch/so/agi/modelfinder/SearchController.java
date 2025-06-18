@@ -1,5 +1,8 @@
 package ch.so.agi.modelfinder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -45,24 +48,17 @@ public class SearchController {
     @GetMapping(path = "/models", produces = "text/html")
     public ModelAndView getModelsAsHtml(
             @RequestParam(value = "query", required = false) String queryString, 
-            @RequestParam(value = "serverUrl", required = false) String serverUrl, 
-            @RequestParam(value = "file", required = false) String file,
             Model model
-            ) {        
-        ModelAndView mav = new ModelAndView("index");
-        mav.addObject("name", "Stefan");
-        return mav;
+            ) {   
+                
+        List<ModelSearchResult> modelSearchResults = new ArrayList<>();
+        if (queryString != null && !queryString.isEmpty()) {
+            modelSearchResults = searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords()).orElse(new ArrayList<>());            
+        }
 
-//        if (serverUrl == null && file == null) {
-//            return searchService.getDocumentsByQuery(queryString, properties.queryMaxRecords())
-//                    .map(ResponseEntity::ok)
-//                    .orElseGet(() -> ResponseEntity.noContent().build());
-//        } 
-//        // return: eher empty list? -> einfacher für den client event. htmx?
-//        
-//        return searchService.getDocumentById(serverUrl, file)
-//                .map(ResponseEntity::ok)
-//                .orElseGet(() -> ResponseEntity.noContent().build());   
+        ModelAndView mav = new ModelAndView("search-results");
+        mav.addObject("modelSearchResults", modelSearchResults);
+        return mav;
     }
 
     

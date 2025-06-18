@@ -1,74 +1,55 @@
 @import java.util.List
 @import java.time.LocalDate
 @import java.lang.String
-@import ch.so.agi.meta.Product
+@import ch.so.agi.modelfinder.ModelSearchResult
 
-@param List<Product> productList
-@param String baseUrl = "https://sos-ch-dk-2.exo.io/ch.so.agi.fubar1/"
+@param List<ModelSearchResult> modelSearchResults
 
-
-<!-- TODO: nicht alle haben einen WGC-Link, solche, die nur als WMS oder dataservice verfügbar sind -->
-
-
-@for (var product : productList) 
-    <tr>
-        <td  style="padding-right:0px;">
-            @if(product.dtype().equals("simiProduct_LayerGroup"))
-                <i style="cursor: pointer;" class="material-icons" hx-on:click="this.closest('tbody').querySelectorAll('.child-row-${product.id()}').forEach(el => el.classList.toggle('expanded'))">add</i>
-            <!--@elseif(product.dtype().equals("simiProduct_ExternalWmsLayers"))
-                <i class="material-icons-two-tone">open_in_new</i>-->
-            @else 
-                <!--<i class="material-icons-two-tone">map</i>-->
-                <i class="material-icons-outlined">map</i>
-            @endif
-        </td>
-        <td colspan="2">${product.title()}</td>
-        <!--<td>${product.dtype()}</td>-->
-        <td>
-            @if(product.description() != null) 
-                $unsafe{product.description()}
-            @elseif(product.description_override() != null) 
-                $unsafe{product.description_override()}
-            @elseif(product.description_model() != null) 
-                $unsafe{product.description_model()}            
-            @endif
-        </td>
-        <td>
-            @if(product.transparency() != null && !product.transparency().equals("0"))
-                <a href="https://geo.so.ch/map?l=${product.ident_part()}[${product.transparency()}]" target="_blank"><i class="material-icons-outlined black-link">open_in_new</i></a>
-            @else
-                <a href="https://geo.so.ch/map?l=${product.ident_part()}" target="_blank"><i class="material-icons-outlined black-link">open_in_new</i></a>                
-            @endif
-        </td>
-        <td><a href="product/${product.ident_part()}" target="_blank"><i class="material-icons-outlined black-link">info</i></a></td>
-    </tr>
-
-    @if(product.children().length > 0)
-
-        @for (var child : product.children())
-        <tr class="child-row-${product.id()} hidden">
-            <td></td>
-            <td  style="padding-right:0px;"><i class="material-icons-outlined">map</i></td>
-            <td>${child.title()}</td>
-            <td>
-                @if(child.description() != null) 
-                    $unsafe{child.description()}
-                @elseif(child.description_override() != null) 
-                    $unsafe{child.description_override()}
-                @elseif(child.description_model() != null) 
-                    $unsafe{child.description_model()}            
-                @endif
-            </td>
-            <td>
-                @if(child.transparency() != null && !child.transparency().equals("0"))
-                    <a href="https://geo.so.ch/map?l=${child.ident_part()}[${child.transparency()}]" target="_blank"><i class="material-icons-outlined black-link">open_in_new</i></a>
-                @else
-                    <a href="https://geo.so.ch/map?l=${child.ident_part()}" target="_blank"><i class="material-icons-outlined black-link">open_in_new</i></a>                
-                @endif            
-            </td>
-            <td><a href="product/${child.ident_part()}" target="_blank"><i class="material-icons-outlined black-link">info</i></a></td>
-        </tr>
-        @endfor
-    @endif
-@endfor
-    
+@for (var searchResult : modelSearchResults) 
+    <details class="repo-details">
+        <summary class="repo-summary">
+            ${searchResult.serverDisplayName()} (${searchResult.modelCount()})
+        </summary>
+        
+        <table>
+            <colgroup>
+                <col style="width: 2%" />
+                <col />
+                <col style="width: 12%"/>
+                <col style="width: 12%"/>
+                <col style="width: 12%" />
+                <col style="width: 12%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Name</th>
+                <th>Version</th>
+                <th>ILI-Version</th>
+                <th>Detail</th>
+                <th>Datei</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var metadata : searchResult.models()) 
+                <tr>
+                    <td><i class="bi bi-file-earmark-text" style="font-size: 1.2rem;"></i></td>
+                    <td>${metadata.name()}</td>
+                    <td>${metadata.version()}</td>
+                    <td>${metadata.schemaLanguage().substring(3).replace("_", ".")}</td>
+                    <td>
+                        <a href="models?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}" target="_blank">
+                            <i class="bi bi-info-circle" style="font-size: 1.2rem;"></i>                        
+                        </a>
+                    </td>
+                    <td>
+                        <a href="${metadata.serverUrl()}/${metadata.file()}" target="_blank">
+                            <i class="bi bi-box-arrow-up-right" style="font-size: 1.2rem;"></i>                        
+                        </a>
+                    </td>
+                </tr>
+            @endfor
+            </tbody>
+        </table>
+    </details>
+@endfor    

@@ -5,21 +5,70 @@ button, input, optgroup, select, textarea {
     font-size: 16px;
 }
 
+.container {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-.my-input {
+.search-input {
     width: 100%;
-    height: 220px;
+    height: 60px;
     background-color: #F4F4F4;
     border-top: 0px solid black;
     border-right: 0px solid black;
     border-bottom: 1px solid black;
     border-left: 0px solid black;
-    box-sizing: border-box; /* Ensures padding and border are included in the width/height */
+    box-sizing: border-box;
+    padding: 0 5px 0 30px; /* Added left padding for the icon */
+    outline: none; /* Remove default blue/orange outline */
+    font-size: 16px;
+    color: #333;
 }
 
-.my-input:focus {
+.search-input:focus {
     border-bottom: 1px solid rgb(198, 40, 40);
     outline: none;
+}
+
+.input-container {
+  position: relative;
+  width: 100%; 
+  margin-right: 20px;
+}
+.magnifier-icon {
+  position: absolute;
+  top: 0;
+  left: 5px; /* Position inside the field, before the text */
+  height: 60px; /* Match input height */
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  color: #666; /* Icon color */
+  font-size: 16px; /* Icon size */
+  pointer-events: none; /* Crucial to allow clicks to pass through */
+  z-index: 1; /* Ensure icon is above input, if needed */
+}
+
+.clear-icon {
+  position: absolute;
+  top: 0;
+  right: 5px; /* Position inside the field, after the text */
+  height: 60px; /* Match input height */
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  color: #666; /* Icon color */
+  font-size: 16px; /* Icon size */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  z-index: 1; /* Ensure icon is above input */
+}
+
+.repo-details {
+    padding: 20px 0px;
+    border-bottom: 1px solid #eee;
+}
+
+.repo-summary {
+    display: list-item;
 }
 
 table {
@@ -48,48 +97,11 @@ th, td {
     background-color: white;
 }
 
-tr.hidden td {
-    background-color: white;
-    border-top: 0px solid white;
-    padding-top: 10px;
-    padding-right: 16px;
-    padding-bottom: 12px;
-    padding-left: 16px;
-}
-
 thead tr th {
   border-top: 0px solid white;
 }
 
 tr:hover td {background:#eeeeee;}
-
-.hidden {
-    display: none;
-}
-
-.expanded {
-    display: table-row;
-}
-
-/*
-.multi-line-ellipsis {
-    white-space:nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-*/
-
-.container {
-    width: 85%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/*
-#product_detail > p {
-    margin-top: 50px;     
-}
-*/
 
 .red-link {
     overflow: hidden;
@@ -106,20 +118,24 @@ a.red-link:visited {
 }
 
 a:link {
-    color: rgb(198, 40, 40); 
-}
-
-a:visited {
-    color: rgb(198, 40, 40); 
-}
+    color: #333333;
+    text-decoration: underline !important;
+} 
 
 a:hover {
-    color: rgb(198, 40, 40); 
-}
+    color: rgb(198, 40, 40) !important;
+    text-decoration: underline !important;
+}  
 
 a:active {
     color: rgb(198, 40, 40); 
+    text-decoration: underline !important;
 } 
+
+a:visited {
+    color: #333333; 
+    /*text-decoration: underline !important;*/
+}
 
 .black-link {
     overflow: hidden;

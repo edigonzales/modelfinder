@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
@@ -85,7 +86,7 @@ public class SearchService {
         return Optional.empty();
     }
     
-    public Optional<List<ModelMetadata>> getDocumentsByQuery(String queryString, int limit) {
+    public Optional<List<ModelSearchResult>> getDocumentsByQuery(String queryString, int limit) {
         try (IndexReader reader = DirectoryReader.open(directory)) {
             IndexSearcher searcher = new IndexSearcher(reader);
 
@@ -95,14 +96,14 @@ public class SearchService {
                 String token = QueryParser.escape(splitedQuery[i]);
                 log.debug("token: " + token);
 
-                luceneQueryString += "(name:*" + token + "*^10 OR "
+                luceneQueryString += "(name:*" + token + "* OR "
                         + "file:*" + token + "* OR "
                         + "title:*" + token + "* OR "
                         + "issuer:*" + token + "* OR "
                         //+ "organisation:*" + token + "* OR "
                         + "technicalContact:*" + token + "* OR "
                         + "furtherInformation:*" + token + "* OR "
-                        + "idGeoIV:" + token + "*^20";
+                        + "idGeoIV:" + token + "*";
                 luceneQueryString += ")";
                 if (i<splitedQuery.length-1) {
                     luceneQueryString += " AND ";
@@ -117,8 +118,9 @@ public class SearchService {
                 queryParser = new QueryParser("name", analyzer);
                 queryParser.setAllowLeadingWildcard(true);
                 
-                Query tmpQuery = queryParser.parse(luceneQueryString);
-                query = FunctionScoreQuery.boostByValue(tmpQuery, DoubleValuesSource.fromDoubleField("boost"));                
+                query = queryParser.parse(luceneQueryString);
+//                Query tmpQuery = queryParser.parse(luceneQueryString);
+//                query = FunctionScoreQuery.boostByValue(tmpQuery, DoubleValuesSource.fromDoubleField("boost"));                
             }
             
             TopDocs results = searcher.search(query, limit);
@@ -135,12 +137,25 @@ public class SearchService {
             }
             
             //if (sortByName) {
-//            if (true) {
-//                metadataList.sort(Comparator.comparing(ModelMetadata::name, 
-//                    String.CASE_INSENSITIVE_ORDER));
-//            }
-            
-            return Optional.of(metadataList);
+            if (true) {
+                metadataList.sort(Comparator.comparing(ModelMetadata::name, String.CASE_INSENSITIVE_ORDER));
+            }
+
+            List<ModelSearchResult> searchResults = metadataList.stream()
+                    .collect(Collectors.groupingBy(ModelMetadata::serverUrl)) // Group by serverUrl
+                    .entrySet().stream()
+                    .map(entry -> {
+                        String serverUrl = entry.getKey();
+                        List<ModelMetadata> models = entry.getValue();
+                        String serverDisplayName = serverUrl
+                                .replaceFirst("^https?://", ""); // Remove http:// or https://
+                        int modelCount = models.size();
+                        return new ModelSearchResult(serverDisplayName, modelCount, models);
+                    })
+                    .sorted(Comparator.comparing(ModelSearchResult::serverDisplayName))
+                    .collect(Collectors.toList());
+                        
+            return Optional.of(searchResults);
         } catch (IOException | ParseException e) {
             log.error("Error searching Lucene index", e);
             throw new RuntimeException("Search failed", e);
