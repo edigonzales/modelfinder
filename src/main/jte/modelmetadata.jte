@@ -149,6 +149,8 @@
                 <pre style="line-height: 1.52; font-size: 0.9rem;"><code class="language-interlis">${metadata.modelContent()}</code></pre>          
             </div>
         </div>
+        
+        <!-- SVG zoom / panning nicht vergessen. -->
 
     </div>
 </body>
