@@ -89,8 +89,9 @@ graalvmNative {
         main {
             buildArgs.add('-march=compatibility')
             buildArgs.add('-Djava.awt.headless=false')
+            buildArgs.add('--native-image-info')
             verbose = true
-            quickBuild = true // Enables quick build mode
+            //quickBuild = true // Enables quick build mode
             //buildArgs.add('--exclude=org.apache.lucene.internal.tests.TestSecrets')
             //buildArgs.add("-H:+ForeignAPISupport") // AMD64 only. Ggf. für Lucene ab 9.10.0
             //buildArgs.addAll('--initialize-at-run-time=org.slf4j.helpers.Reporter,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory')
