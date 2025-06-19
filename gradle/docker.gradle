@@ -1,6 +1,6 @@
 tasks.register('copyNativeImage', Copy) {
     //dependsOn 'nativeCompile'
-    from file("$buildDir/native/nativeCompile/kartenkatalog")
+    from file("$buildDir/native/nativeCompile/modelfinder")
     into file("$projectDir/docker/image/tmp")
 }
 

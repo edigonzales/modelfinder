@@ -34,16 +34,13 @@ public class MainController {
         log.info("server name: " + request.getServerName());
         log.info("context path: " + request.getContextPath());
         log.info("ping"); 
-        return new ResponseEntity<String>("kartenkatalog", HttpStatus.OK);
+        return new ResponseEntity<String>("modelfinder", HttpStatus.OK);
     }
     
     @GetMapping("/")
     public ModelAndView home(Model model) {
-        
         ModelAndView mav = new ModelAndView("models");
-        //mav.addObject("product", product);
         return mav;
-
     }
 
 

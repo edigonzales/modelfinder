@@ -75,7 +75,7 @@ public class SearchService {
             TopDocs results = searcher.search(queryBuilder.build(), 1);
             
             if (results.scoreDocs.length > 0) {
-                Document document = searcher.storedFields().document(results.scoreDocs[0].doc);
+                Document document = searcher.doc(results.scoreDocs[0].doc);//.storedFields().document(results.scoreDocs[0].doc);
                 ModelMetadata metadata = mapDocument(document, true);
                 return Optional.of(metadata);
             }
@@ -131,7 +131,7 @@ public class SearchService {
 
             List<ModelMetadata> metadataList = new ArrayList<>();
             for (ScoreDoc scoreDoc : results.scoreDocs) {
-                Document document = searcher.storedFields().document(scoreDoc.doc);
+                Document document = searcher.doc(scoreDoc.doc);//.storedFields().document(scoreDoc.doc);
                 ModelMetadata metadata = mapDocument(document);
                 metadataList.add(metadata);
             }

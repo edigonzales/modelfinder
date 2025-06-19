@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -110,8 +109,8 @@ public class SearchController {
         } else {
             try {
                 Path tempDir = Files.createTempDirectory("uml_");
-                Path iliFile = tempDir.resolve(modelMetadata.name()+".ili");
-                FileUtils.writeStringToFile(iliFile.toFile(), modelMetadata.modelContent(), Charset.defaultCharset());
+                Path iliFile = tempDir.resolve(modelMetadata.name()+".ili");                
+                Files.write(iliFile, modelMetadata.modelContent().getBytes());
                 
                 Path umlFile = UmlEditorUtility.createUmlDiagram(iliFile, null, tempDir, UmlDiagramVendor.MERMAID);
                 
@@ -133,15 +132,6 @@ public class SearchController {
                 htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
             }
         }
-        
-//        htmlString = """
-//<pre class="mermaid">
-//graph TD;
-//  A[Start] --> B{Loaded?};
-//  B -- Yes --> C[Render];
-//  B -- No --> D[Fix];
-//</pre>
-//                """;
         
         return htmlString;
     }

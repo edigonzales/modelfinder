@@ -15,22 +15,15 @@ import org.springframework.stereotype.Service;
 import ch.interlis.ilirepository.impl.ModelLister;
 import ch.interlis.ilirepository.impl.RepositoryAccess;
 import ch.interlis.ilirepository.impl.RepositoryAccessException;
-import ch.interlis.ilirepository.impl.RepositoryVisitor;
 
 @Service
 public class RemoteReaderService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-
-    private final IndexingProperties properties;
-
-    public RemoteReaderService(IndexingProperties properties) {
-        this.properties = properties;
-    }
     
     public Optional<List<ModelMetadata>> fetchData(String serverUrl) {
+        log.info("Processing repository: {}", serverUrl);
         List<ModelMetadata> modelMetadataRecordList = new ArrayList<>();
         try {
-            List<String> repositories = properties.repositories();
             RepositoryAccess repoAccess = new RepositoryAccess();
             
             ModelLister modelLister = new ModelLister();
@@ -41,6 +34,7 @@ public class RemoteReaderService {
                 if (modelMetadata.getFile().contains("obsolete") || modelMetadata.getFile().contains("replaced")) {
                     continue;
                 }
+                log.debug("Processing model: {}", modelMetadata.getName());
 
                 String idGeoIV = modelMetadata.getFile().contains("geo.admin.ch") ? modelMetadata.getTags() : null;
                 String modelContent = readUrlToString(serverUrl + "/" + modelMetadata.getFile());

@@ -1,0 +1,19 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5
+
+ARG UID=1001
+RUN adduser -u $UID modelfinder 
+
+ENV HOME=/app
+WORKDIR $HOME
+
+COPY tmp/modelfinder ./application
+
+RUN chown $UID:0 . && \
+    chmod 0775 . && \
+    ls -la
+
+USER $UID
+
+EXPOSE 8080
+
+ENTRYPOINT ["./application", "-Dspring.profiles.active=prod"]
