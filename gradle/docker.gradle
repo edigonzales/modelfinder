@@ -59,7 +59,7 @@ tasks.register('buildJavaDockerImage', Exec) {
                 '--label', "modelfinder-jvm.created=$build_timestamp", 
                 '--label', "modelfinder-jvm.git_commit=$githash",
                 '--label', "modelfinder-jvm.version=$version",
-                '-f', 'Dockerfile.native',  '.', '--push'
+                '-f', 'Dockerfile.ubi-layered',  '.', '--push'
                 //'-f', 'Dockerfile.ubi-layered',  '.'
 }
 
