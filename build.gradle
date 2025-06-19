@@ -7,7 +7,7 @@ plugins {
 }
 
 apply from: "$rootDir/gradle/versioning.gradle"
-//apply from: "$rootDir/gradle/docker.gradle"
+apply from: "$rootDir/gradle/docker.gradle"
 
 group = 'ch.so.agi'
 
