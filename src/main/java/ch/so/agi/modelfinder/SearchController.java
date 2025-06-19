@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -117,14 +118,31 @@ public class SearchController {
                 if (umlFile == null) {
                     htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
                 } else {
-                    String mermaidString = Files.readString(umlFile);                    
-                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString+"</pre>";
+                    String mermaidString = Files.readString(umlFile);    
+                    
+                    // Workaround:
+                    // Die ersten drei Zeilen entfernen (wegen Titel).
+                    String sanitizedMermaidString = mermaidString.lines()
+                            .skip(3)
+                            .collect(Collectors.joining(System.lineSeparator()));
+                    
+                    htmlString = "<pre class=\"mermaid\">\n"+sanitizedMermaidString+"</pre>";
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
             }
         }
+        
+//        htmlString = """
+//<pre class="mermaid">
+//graph TD;
+//  A[Start] --> B{Loaded?};
+//  B -- Yes --> C[Render];
+//  B -- No --> D[Fix];
+//</pre>
+//                """;
+        
         return htmlString;
     }
 }

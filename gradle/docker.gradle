@@ -28,14 +28,15 @@ tasks.register('buildNativeDockerImage', Exec) {
     workingDir "$projectDir/docker/image"
     commandLine 'docker', 'buildx', 'build',
                 '--platform', 'linux/amd64',
-                '-t', "sogis/kartenkatalog:$version.major",
-                '-t', "sogis/kartenkatalog:$version.major.$version.minor",
-                '-t', "sogis/kartenkatalog:$version.major.$version.minor.$version.build",
-                '-t', "sogis/kartenkatalog:latest",
-                '--label', "kartenkatalog.created=$build_timestamp", 
-                '--label', "kartenkatalog.git_commit=$githash",
-                '--label', "kartenkatalog.version=$version",
-                '-f', 'Dockerfile.native',  '.', '--push'
+                '-t', "sogis/modelfinder:$version.major",
+                '-t', "sogis/modelfinder:$version.major.$version.minor",
+                '-t', "sogis/modelfinder:$version.major.$version.minor.$version.build",
+                '-t', "sogis/modelfinder",
+                '--label', "modelfinder.created=$build_timestamp", 
+                '--label', "modelfinder.git_commit=$githash",
+                '--label', "modelfinder.version=$version",
+                //'-f', 'Dockerfile.native',  '.', '--push'
+                '-f', 'Dockerfile.native',  '.'
 }
 
 def getCheckedOutGitCommitHash() {

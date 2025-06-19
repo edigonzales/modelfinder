@@ -19,19 +19,24 @@
     
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({ startOnLoad: false });
 
-        // This function is triggered after HTMX loads the diagram
-        function renderMermaid() {
-            mermaid.init(undefined, "#diagram-container");
-        }
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true });
+
+        // Wait for the DOM to be ready before running the code
+        document.addEventListener('DOMContentLoaded', function() {
+            // This code will only run after the body exists.
+            document.body.addEventListener('htmx:afterSwap', function(event) {
+                mermaid.run();
+            });
+        });
     </script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" />
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="modelfinder.css">
-
 </head>
 
 <body>
@@ -141,8 +146,6 @@
             </div>
         </div>
         
-        <p>&nbsp;</p>
-
         <div class="textedit-container">
             <label class="textedit-label">Model</label>
             <div class="textedit-display textedit-display-area" style="overflow-y: auto;">
@@ -151,6 +154,20 @@
         </div>
         
         <!-- SVG zoom / panning nicht vergessen. -->
+
+        <div 
+            hx-get="uml?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}"
+            hx-trigger="load" 
+            hx-target="#diagram-container" 
+            hx-swap="innerHTML">
+        </div>
+
+        <div class="textedit-container">
+            <label class="textedit-label">UML diagram</label>
+            <div id="diagram-container" class="textedit-display textedit-display-line">
+                <p><em>Waiting for diagram to be loaded...</em></p>
+            </div>
+        </div>
 
     </div>
 </body>
