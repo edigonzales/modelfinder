@@ -1,3 +1,4 @@
+!lib/*.jar
 jte-classes/
 .DS_Store
 !datahub_key.xtf
@@ -197,6 +198,7 @@ modules.xml
 
 # Package Files #
 *.jar
+!lib/*.jar
 *.war
 *.nar
 *.ear
