@@ -45,7 +45,7 @@ tasks.register('copyJar', Copy) {
 }
 
 tasks.register('buildJavaDockerImage', Exec) {
-    dependsOn 'copyNativeImage'
+    dependsOn 'copyJar'
     def githash = getCheckedOutGitCommitHash()
     def build_timestamp = getTimestamp()
 
