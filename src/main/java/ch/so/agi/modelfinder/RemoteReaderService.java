@@ -109,6 +109,8 @@ public class RemoteReaderService {
                 organisation = new Organisation("models.interlis.ch", "INTERLIS");
             case String s when s.contains("models.kgk-cgc.ch") ->
                 organisation = new Organisation("kgk-cgc.ch", "KGK-CGC");
+            case String s when s.contains("models.geo.admin.ch") ->
+                organisation = new Organisation("admin.ch", "Bund");
             default -> {
                 log.warn("No matching administration found for: " + serverUrl);
             }
