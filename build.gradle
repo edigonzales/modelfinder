@@ -31,8 +31,8 @@ configurations.all {
     exclude group: 'net.sourceforge.plantuml', module: 'plantuml'
     exclude group: 'org.apache.xmlgraphics'
     exclude group: 'info.picocli'
-    exclude group: 'com.sun.xml.bind'
-    exclude group: 'javax.xml.bind'
+    //exclude group: 'com.sun.xml.bind'
+    //exclude group: 'javax.xml.bind'
     
     //exclude group: 'commons-logging', module: 'commons-logging'
     //exclude group: 'ch.qos.logback', module: 'logback-classic' 
