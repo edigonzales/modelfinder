@@ -69,6 +69,10 @@ dependencies {
     }
 }
 
+bootJar {
+    archiveClassifier.set('exec')
+}
+
 jte {
     generate()
     binaryStaticContent = true

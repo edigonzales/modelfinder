@@ -35,8 +35,32 @@ tasks.register('buildNativeDockerImage', Exec) {
                 '--label', "modelfinder.created=$build_timestamp", 
                 '--label', "modelfinder.git_commit=$githash",
                 '--label', "modelfinder.version=$version",
+                '-f', 'Dockerfile.native',  '.', '--push'
+                //'-f', 'Dockerfile.native',  '.'
+}
+
+tasks.register('copyJar', Copy) {
+    from file("$buildDir/libs/modelfinder-$version.major.$version.minor.$version.build-exec.jar")
+    into file("$projectDir/docker/image/tmp")
+}
+
+tasks.register('buildJavaDockerImage', Exec) {
+    dependsOn 'copyNativeImage'
+    def githash = getCheckedOutGitCommitHash()
+    def build_timestamp = getTimestamp()
+
+    workingDir "$projectDir/docker/image"
+    commandLine 'docker', 'buildx', 'build',
+                '--platform', 'linux/amd64,linux/arm64',
+                '-t', "sogis/modelfinder-jvm:$version.major",
+                '-t', "sogis/modelfinder-jvm:$version.major.$version.minor",
+                '-t', "sogis/modelfinder-jvm:$version.major.$version.minor.$version.build",
+                '-t', "sogis/modelfinder-jvm",
+                '--label', "modelfinder-jvm.created=$build_timestamp", 
+                '--label', "modelfinder-jvm.git_commit=$githash",
+                '--label', "modelfinder-jvm.version=$version",
                 //'-f', 'Dockerfile.native',  '.', '--push'
-                '-f', 'Dockerfile.native',  '.'
+                '-f', 'Dockerfile.ubi-layered',  '.'
 }
 
 def getCheckedOutGitCommitHash() {
