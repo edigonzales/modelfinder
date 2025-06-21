@@ -37,6 +37,7 @@ jobs:
         run: |
           ./gradlew clean nativeCompile 
           ls -la build/native/nativeCompile/
+          ldd build/native/nativeCompile/modelfinder
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
