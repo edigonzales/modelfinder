@@ -135,6 +135,7 @@
             </div>
         </div>
         
+        <!--
         <div class="textedit-container">
             <label class="textedit-label">IDGeoIV</label>
             <div class="textedit-display textedit-display-line">                
@@ -145,6 +146,7 @@
                 @endif
             </div>
         </div>
+        -->
         
         <div class="textedit-container">
             <label class="textedit-label">Model</label>

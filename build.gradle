@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.graalvm.buildtools.native' version '0.10.6'
     id 'gg.jte.gradle' version '3.1.16'
@@ -54,7 +54,7 @@ dependencies {
     implementation 'ch.interlis:ili2c-tool:5.6.3'
     implementation 'ch.interlis:ili2c-core:5.6.3'
     implementation 'ch.interlis:iox-ili:1.23.4'
-    implementation ('io.github.sogis:iliprettyprint:0.0.67') {
+    implementation ('io.github.sogis:iliprettyprint:0.0.78') {
         exclude group: 'ch.interlis', module: 'umleditor'
     }
     //implementation name: 'sebase'
@@ -96,7 +96,7 @@ graalvmNative {
             buildArgs.add('--native-image-info')
             verbose = true
             //quickBuild = true // Enables quick build mode
-            //buildArgs.add("-H:+ForeignAPISupport") // AMD64 only. Ggf. für Lucene ab 9.10.0
+            //buildArgs.add("-H:+ForeignAPISupport") // AMD64 only. Ggf. für Lucene ab 9.x
         }
     }
 }

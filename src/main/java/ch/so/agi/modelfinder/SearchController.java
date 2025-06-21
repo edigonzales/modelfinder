@@ -118,14 +118,8 @@ public class SearchController {
                     htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
                 } else {
                     String mermaidString = Files.readString(umlFile);    
-                    
-                    // Workaround:
-                    // Die ersten drei Zeilen entfernen (wegen Titel).
-                    String sanitizedMermaidString = mermaidString.lines()
-                            .skip(3)
-                            .collect(Collectors.joining(System.lineSeparator()));
-                    
-                    htmlString = "<pre class=\"mermaid\">\n"+sanitizedMermaidString+"</pre>";
+                    //log.info(mermaidString);
+                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
                 }
             } catch (IOException e) {
                 e.printStackTrace();
