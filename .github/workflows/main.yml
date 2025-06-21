@@ -26,9 +26,9 @@ jobs:
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '23.0.2'
-          #distribution: 'graalvm'
-          distribution: 'liberica'
+          java-version: '24'
+          distribution: 'graalvm'
+          #distribution: 'liberica'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'gradle'
 
