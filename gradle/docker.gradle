@@ -1,7 +1,7 @@
 tasks.register('copyNativeImage', Copy) {
     //dependsOn 'nativeCompile'
-    from file("$buildDir/native/nativeCompile/modelfinder")
-    from file("$buildDir/native/nativeCompile/") {
+    from fileTree("$buildDir/native/nativeCompile").matching {
+        include 'modelfinder'  
         include '**/*.so'
     }
     into file("$projectDir/docker/image/tmp")
