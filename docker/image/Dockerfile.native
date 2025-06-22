@@ -9,6 +9,8 @@ WORKDIR $HOME
 COPY tmp/modelfinder ./application
 COPY tmp/*.so .
 
+RUN ldd libawt.so
+
 RUN chown $UID:0 . && \
     chmod 0775 . && \
     ls -la
