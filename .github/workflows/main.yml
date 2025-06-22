@@ -38,7 +38,6 @@ jobs:
           ./gradlew clean nativeCompile -i
           ls -la build/native/nativeCompile/
           ldd build/native/nativeCompile/modelfinder
-          ls -la docker/image/tmp/
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
@@ -65,6 +64,7 @@ jobs:
       - name: Build Docker Image 
         run: |
           ./gradlew buildNativeDockerImage
+          ls -la docker/image/tmp/
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') && !env.ACT }}
 
 
