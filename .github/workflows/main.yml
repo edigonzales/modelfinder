@@ -64,9 +64,7 @@ jobs:
       - name: Build Docker Image 
         run: |
           ./gradlew buildNativeDockerImage
-          ls -la docker/image/tmp/
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') && !env.ACT }}
-
 
   build-jvm:
     env:
