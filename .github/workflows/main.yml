@@ -35,9 +35,10 @@ jobs:
       # Wird nur kompiliert. Es wird nichts getestet.
       - name: Build native image
         run: |
-          ./gradlew clean nativeCompile 
+          ./gradlew clean nativeCompile -i
           ls -la build/native/nativeCompile/
           ldd build/native/nativeCompile/modelfinder
+          ls -la docker/image/tmp/
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
