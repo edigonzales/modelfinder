@@ -92,7 +92,7 @@ graalvmNative {
     binaries {
         main {
             buildArgs.add('-march=compatibility')
-            buildArgs.add('-Djava.awt.headless=false')
+            buildArgs.add('-Djava.awt.headless=true')
             buildArgs.add('--native-image-info')
             verbose = true
             //quickBuild = true // Enables quick build mode
