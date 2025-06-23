@@ -35,6 +35,12 @@ FROM bellsoft/liberica-openjdk-debian:24.0.1-11-cds
 ARG UID=1001
 RUN adduser -u $UID modelfinder 
 
+WORKDIR /work
+RUN chown $UID:0 . && \
+    chmod 0775 . && \
+    ls -la
+VOLUME ["/work"]
+
 ENV HOME=/app
 WORKDIR /app
 
@@ -53,6 +59,6 @@ COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/application/ ./
 
 USER $UID
 
-RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -jar /app/app.jar -Dspring.profiles.active=docker 
+RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -Dspring.profiles.active=docker -jar /app/app.jar
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf -Dspring.context.exit=onRefresh -jar /app/app.jar
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=app.aot -jar /app/app.jar
