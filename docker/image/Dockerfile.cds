@@ -48,7 +48,7 @@ RUN chown $UID:0 . && \
     chmod 0775 . && \
     ls -la
 
-ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=application.jsa", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=application.jsa", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 #ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:AOTCache=app.aot", "-jar", "/app/app.jar"]
 
 WORKDIR /app
@@ -59,6 +59,6 @@ COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/application/ ./
 
 USER $UID
 
-RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -Dspring.profiles.active=docker -jar /app/app.jar
+RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -jar /app/app.jar --spring.profiles.active=docker
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf -Dspring.context.exit=onRefresh -jar /app/app.jar
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=app.aot -jar /app/app.jar
