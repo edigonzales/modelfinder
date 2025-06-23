@@ -69,10 +69,12 @@ tasks.register('buildJavaDockerImage', Exec) {
 tasks.register('buildJavaCdsDockerImage', Exec) {
     def githash = getCheckedOutGitCommitHash()
     def build_timestamp = getTimestamp()
+    def build_number = System.env.BUILD_NUMBER
 
     workingDir "$projectDir"
     commandLine 'docker', 'buildx', 'build',
                 '--platform', 'linux/amd64,linux/arm64',
+                '-e', "BUILD_NUMBER=$build_number",
                 '-t', "sogis/modelfinder-jvm-cds:$version.major",
                 '-t', "sogis/modelfinder-jvm-cds:$version.major.$version.minor",
                 '-t', "sogis/modelfinder-jvm-cds:$version.major.$version.minor.$version.build",
