@@ -1,6 +1,6 @@
 FROM eclipse-temurin:21.0.7_6-jre-ubi9-minimal AS builder
 
-WORKDIR application
+WORKDIR /application
 COPY tmp/modelfinder-*-exec.jar ./application.jar
 
 ARG JAR_FILE=tmp/modelfinder-*-exec.jar
@@ -22,16 +22,17 @@ RUN chown $UID:0 . && \
     ls -la
 VOLUME ["/work"]
 
+ENV HOME=/application
 WORKDIR /application
 
 RUN chown $UID:0 . && \
     chmod 0775 . && \
     ls -la
 
-COPY --chown=$UID:0 --chmod=0775 --from=builder application/dependencies/ ./
-COPY --chown=$UID:0 --chmod=0775 --from=builder application/spring-boot-loader/ ./
-COPY --chown=$UID:0 --chmod=0775 --from=builder application/snapshot-dependencies/ ./
-COPY --chown=$UID:0 --chmod=0775 --from=builder application/application/ ./
+COPY --chown=$UID:0 --chmod=0775 --from=builder /application/dependencies/ ./
+COPY --chown=$UID:0 --chmod=0775 --from=builder /application/spring-boot-loader/ ./
+COPY --chown=$UID:0 --chmod=0775 --from=builder /application/snapshot-dependencies/ ./
+COPY --chown=$UID:0 --chmod=0775 --from=builder /application/application/ ./
 
 USER $UID
 
