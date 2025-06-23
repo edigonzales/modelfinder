@@ -37,7 +37,7 @@ RUN adduser -u $UID modelfinder
 
 WORKDIR /work
 RUN chown $UID:0 . && \
-    chmod 0775 . && \
+    chmod 0777 . && \
     ls -la
 VOLUME ["/work"]
 
@@ -47,8 +47,6 @@ WORKDIR /app
 RUN chown $UID:0 . && \
     chmod 0775 . && \
     ls -la
-
-USER $UID
 
 ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=application.jsa", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 #ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:AOTCache=app.aot", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
