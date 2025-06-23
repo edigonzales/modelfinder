@@ -133,12 +133,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: reports
-          path: build/reports/tests/
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
