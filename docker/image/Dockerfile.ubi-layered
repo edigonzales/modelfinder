@@ -22,7 +22,7 @@ RUN chown $UID:0 . && \
     ls -la
 VOLUME ["/work"]
 
-WORKDIR application
+WORKDIR /application
 
 RUN chown $UID:0 . && \
     chmod 0775 . && \

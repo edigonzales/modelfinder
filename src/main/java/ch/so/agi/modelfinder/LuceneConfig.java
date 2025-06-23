@@ -27,6 +27,7 @@ public class LuceneConfig {
 
     @Bean
     public Directory luceneDirectory() throws IOException {
+        System.out.println("************* " + properties.directory());
         return NIOFSDirectory.open(Paths.get(properties.directory()));
     }
 
