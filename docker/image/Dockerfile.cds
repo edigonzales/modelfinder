@@ -37,9 +37,8 @@ RUN adduser -u $UID modelfinder
 
 WORKDIR /work
 RUN chown $UID:0 . && \
-    chmod 0777 . && \
+    chmod 0775 . && \
     ls -la
-VOLUME ["/work"]
 
 ENV HOME=/app
 WORKDIR /app
