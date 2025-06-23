@@ -80,8 +80,8 @@ tasks.register('buildJavaCdsDockerImage', Exec) {
                 '--label', "modelfinder-jvm-cds.created=$build_timestamp", 
                 '--label', "modelfinder-jvm-cds.git_commit=$githash",
                 '--label', "modelfinder-jvm-cds.version=$version",
-                //'-f', 'Dockerfile.cds',  '.', '--push'
-                '-f', "$projectDir/docker/image/Dockerfile.cds",  '.'
+                '-f', "$projectDir/docker/image/Dockerfile.cds",  '.', '--push'
+                //'-f', "$projectDir/docker/image/Dockerfile.cds",  '.'
 }
 
 def getCheckedOutGitCommitHash() {
