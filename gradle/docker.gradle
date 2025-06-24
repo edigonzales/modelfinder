@@ -66,7 +66,7 @@ tasks.register('buildJavaDockerImage', Exec) {
                 //'-f', 'Dockerfile.ubi-layered',  '.'
 }
 
-tasks.register('buildJavaCdsDockerImage', Exec) {
+tasks.register('buildJavaAotDockerImage', Exec) {
     def githash = getCheckedOutGitCommitHash()
     def build_timestamp = getTimestamp()
     def build_number = System.env.BUILD_NUMBER
@@ -75,15 +75,15 @@ tasks.register('buildJavaCdsDockerImage', Exec) {
     commandLine 'docker', 'buildx', 'build',
                 '--platform', 'linux/amd64,linux/arm64',
                 '--build-arg', "BUILD_NUMBER=$build_number",
-                '-t', "sogis/modelfinder-jvm-cds:$version.major",
-                '-t', "sogis/modelfinder-jvm-cds:$version.major.$version.minor",
-                '-t', "sogis/modelfinder-jvm-cds:$version.major.$version.minor.$version.build",
-                '-t', "sogis/modelfinder-jvm-cds",
-                '--label', "modelfinder-jvm-cds.created=$build_timestamp", 
-                '--label', "modelfinder-jvm-cds.git_commit=$githash",
-                '--label', "modelfinder-jvm-cds.version=$version",
-                '-f', "$projectDir/docker/image/Dockerfile.cds",  '.', '--push'
-                //'-f', "$projectDir/docker/image/Dockerfile.cds",  '.'
+                '-t', "sogis/modelfinder-jvm-aot:$version.major",
+                '-t', "sogis/modelfinder-jvm-aot:$version.major.$version.minor",
+                '-t', "sogis/modelfinder-jvm-aot:$version.major.$version.minor.$version.build",
+                '-t', "sogis/modelfinder-jvm-aot",
+                '--label', "modelfinder-jvm-aot.created=$build_timestamp", 
+                '--label', "modelfinder-jvm-aot.git_commit=$githash",
+                '--label', "modelfinder-jvm-aot.version=$version",
+                '-f', "$projectDir/docker/image/Dockerfile.aot",  '.', '--push'
+                //'-f', "$projectDir/docker/image/Dockerfile.aot",  '.'
 }
 
 def getCheckedOutGitCommitHash() {
