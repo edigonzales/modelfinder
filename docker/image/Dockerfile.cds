@@ -1,6 +1,9 @@
 #FROM bellsoft/liberica-openjdk-debian:21.0.7-9-cds AS builder
 FROM bellsoft/liberica-openjdk-debian:24.0.1-11-cds AS builder
 
+ARG BUILD_NUMBER
+RUN echo "BUILD_NUMBER is: $BUILD_NUMBER"
+
 WORKDIR /workspace/app
 
 COPY gradlew .
