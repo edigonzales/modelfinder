@@ -50,6 +50,8 @@ RUN chown $UID:0 . && \
 ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=application.jsa", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 #ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:AOTCache=app.aot", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 
+RUN find /work -mindepth 1 -delete
+
 WORKDIR /app
 COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/dependencies/ ./
 COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/spring-boot-loader/ ./
