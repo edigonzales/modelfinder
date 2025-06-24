@@ -118,7 +118,7 @@ jobs:
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') && !env.ACT }}
 
 
-  build-jvm-cds:
+  build-jvm-aot:
     env:
       DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}} 
@@ -155,5 +155,5 @@ jobs:
 
       - name: Build application with cds support (Docker image) 
         run: |
-          ./gradlew buildJavaCdsDockerImage -i
+          ./gradlew buildJavaAotDockerImage -i
         if: ${{ (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request') && !env.ACT }}
