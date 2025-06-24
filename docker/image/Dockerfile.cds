@@ -50,7 +50,7 @@ RUN chown $UID:0 . && \
 ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=application.jsa", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 #ENTRYPOINT ["java", "-Dspring.aot.enabled=true", "-XX:AOTCache=app.aot", "-jar", "/app/app.jar", "--spring.profiles.active=docker"]
 
-RUN find /work -mindepth 1 -delete
+#RUN find /work -mindepth 1 -delete
 
 WORKDIR /app
 COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/dependencies/ ./
@@ -60,6 +60,6 @@ COPY --chown=$UID:0 --chmod=0775 --from=optimizer /app/extracted/application/ ./
 
 USER $UID
 
-RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -jar /app/app.jar --spring.profiles.active=docker
+RUN java -Dspring.aot.enabled=true -XX:ArchiveClassesAtExit=./application.jsa -Dspring.context.exit=onRefresh -jar /app/app.jar --spring.profiles.active=docker --indexing.directory=/tmp/
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf -Dspring.context.exit=onRefresh -jar /app/app.jar --spring.profiles.active=docker
 #RUN java -Dspring.aot.enabled=true -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=app.aot -jar /app/app.jar --spring.profiles.active=docker
