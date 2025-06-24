@@ -75,8 +75,10 @@ public class RemoteReaderService {
         switch (serverUrl) {
             case String s when s.contains("geo.so") ->
                 organisation = new Organisation("Solothurn", "SO");
+            case String s when s.contains("geo.ag") ->
+            organisation = new Organisation("Aargau", "AG");
             case String s when s.contains("geo.ai") ->
-                organisation = new Organisation("Appenzell Innerrhoden", "AI");
+            organisation = new Organisation("Appenzell Innerrhoden", "AI");
             case String s when s.contains("geo.ar") ->
                 organisation = new Organisation("Appenzell Ausserrhoden", "AR");
             case String s when s.contains("geo.be") ->
@@ -89,7 +91,7 @@ public class RemoteReaderService {
                 organisation = new Organisation("Glarus", "GL");
             case String s when s.contains("geo.gr") ->
                 organisation = new Organisation("Graubünden", "GR");
-            case String s when s.contains("geo.llv") -> 
+            case String s when s.contains("geo.llv.li") -> 
                 organisation = new Organisation("Liechtenstein", "LI"); 
             case String s when s.contains("geo.lu") ->
                 organisation = new Organisation("Luzern", "LU");
@@ -112,6 +114,7 @@ public class RemoteReaderService {
             case String s when s.contains("models.geo.admin.ch") ->
                 organisation = new Organisation("admin.ch", "Bund");
             default -> {
+                organisation = new Organisation("", "");
                 log.warn("No matching administration found for: " + serverUrl);
             }
         }
