@@ -11,6 +11,7 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 
+COPY lib lib
 COPY src src
 
 RUN --mount=type=cache,target=/root/.gradle \

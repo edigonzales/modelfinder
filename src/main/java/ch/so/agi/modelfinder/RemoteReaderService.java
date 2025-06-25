@@ -31,7 +31,9 @@ public class RemoteReaderService {
             
             List<ch.interlis.ilirepository.impl.ModelMetadata> modelMetadataList = repoAccess.readIlimodelsXml2(serverUrl);
             for (var modelMetadata : modelMetadataList) {                
-                if (modelMetadata.getFile().contains("obsolete") || modelMetadata.getFile().contains("replaced")) {
+                if (modelMetadata.getFile().contains("obsolete") 
+                        || modelMetadata.getFile().contains("replaced")
+                        || modelMetadata.getFile().contains("precursorVersion")) {
                     continue;
                 }
                 log.debug("Processing model: {}", modelMetadata.getName());
