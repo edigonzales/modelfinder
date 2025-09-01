@@ -28,10 +28,12 @@ public class SearchController {
 
     private final SearchService searchService;
     private final IndexingProperties properties;
+    private final UmlMermaidService umlMermaidService;
     
-    public SearchController(SearchService searchService, IndexingProperties properties) {
+    public SearchController(SearchService searchService, IndexingProperties properties, UmlMermaidService umlMermaidService) {
         this.searchService = searchService;
         this.properties = properties;
+        this.umlMermaidService = umlMermaidService;
     }
     
     // http://localhost:8080/models?serverUrl=https://models.interlis.ch&file=tools/IliVErrors.ili    
@@ -112,15 +114,17 @@ public class SearchController {
                 Path iliFile = tempDir.resolve(modelMetadata.name()+".ili");                
                 Files.write(iliFile, modelMetadata.modelContent().getBytes());
                 
-                Path umlFile = UmlEditorUtility.createUmlDiagram(iliFile, null, tempDir, UmlDiagramVendor.MERMAID);
+                Path umlFile = umlMermaidService.create(iliFile);
                 
-                if (umlFile == null) {
-                    htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
-                } else {
-                    String mermaidString = Files.readString(umlFile);    
-                    //log.info(mermaidString);
-                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
-                }
+//                Path umlFile = UmlEditorUtility.createUmlDiagram(iliFile, null, tempDir, UmlDiagramVendor.MERMAID);
+//                
+//                if (umlFile == null) {
+//                    htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
+//                } else {
+//                    String mermaidString = Files.readString(umlFile);    
+//                    //log.info(mermaidString);
+//                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
                 htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
