@@ -158,7 +158,7 @@
         <!-- SVG zoom / panning nicht vergessen. -->
 
         <div 
-            hx-get="./uml?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}"
+            hx-get="./uml-embedded?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}"
             hx-trigger="load" 
             hx-target="#diagram-container" 
             hx-swap="innerHTML">

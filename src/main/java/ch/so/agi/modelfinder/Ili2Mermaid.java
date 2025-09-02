@@ -431,7 +431,8 @@ public final class Ili2Mermaid {
   // ─────────────────────────────────────────────────────────────────────────────
   static final class TypeNamer {
     static String nameOf(AttributeDef a) {
-        Type t = a.getDomainResolvingAliases();
+        //Type t = a.getDomainResolvingAliases();
+        Type t = a.getDomain();
       if (t == null) return "<Unknown>";
 
       // Show referenced structure/class names, or base type names where sensible.
@@ -457,13 +458,44 @@ public final class Ili2Mermaid {
           return "Coord" + nts.length;
       }
       if (t instanceof NumericType) return "Numeric";
-      if (t instanceof TextType) return "String";
+      if (t instanceof TextType) {
+//          TextType tt = (TextType) t;
+//          if (tt.getContainer() != null) {
+//              return tt.getContainer().getName();
+//          }
+          
+          return "String";
+      }
       if (t instanceof EnumerationType) {
           return a.isDomainBoolean() ? "Boolean" : a.getContainer().getName();
+      }
+      if (t instanceof FormattedType && isDateOrTime((FormattedType) t)) {
+          FormattedType ft = (FormattedType) t;
+          return ft.getDefinedBaseDomain().getName();
+      }
+      if (t instanceof TextOIDType) {
+          TextOIDType tt = (TextOIDType) t;
+          Type textOidType = tt.getOIDType();
+          if(textOidType instanceof TypeAlias) {
+              return ((TypeAlias)textOidType).getAliasing().getName();
+          } else {
+              return textOidType.getName();
+          }
+      } if (t instanceof TypeAlias) {
+          TypeAlias ta = (TypeAlias) t;
+          ta.getScopedName();
+          return ta.getAliasing().getName();
       }
       String n = t.getName();
       return (n != null && !n.isEmpty()) ? n : t.getClass().getSimpleName();
     }
+  }
+  
+  private static boolean isDateOrTime(FormattedType formattedType) {
+      Domain baseDomain = formattedType.getDefinedBaseDomain();
+      return baseDomain == PredefinedModel.getInstance().XmlDate
+              || baseDomain == PredefinedModel.getInstance().XmlDateTime
+              || baseDomain == PredefinedModel.getInstance().XmlTime;
   }
 
   static String formatCardinality(Cardinality c) {

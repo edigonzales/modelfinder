@@ -29,19 +29,6 @@ configurations.all {
         force 'ch.interlis:ili2c-tool:5.6.3'
         force 'ch.interlis:ili2c-core:5.6.3'
     }
-    exclude group: 'net.sourceforge.plantuml', module: 'plantuml'
-    exclude group: 'org.apache.xmlgraphics'
-    exclude group: 'info.picocli'
-    //exclude group: 'com.sun.xml.bind'
-    //exclude group: 'javax.xml.bind'
-    
-    //exclude group: 'commons-logging', module: 'commons-logging'
-    //exclude group: 'ch.qos.logback', module: 'logback-classic' 
-    //exclude group: 'ch.qos.logback', module: 'logback-core'    
-    
-    // Bringt wohl nichts, weil eh nicht vorhanden.
-    //exclude group: 'org.apache.lucene', module: 'lucene-core-tests'
-    //exclude group: 'org.apache.lucene', module: 'lucene-core-test-framework'
 }
 
 dependencies {
@@ -55,14 +42,6 @@ dependencies {
     implementation 'ch.interlis:ili2c-tool:5.6.3'
     implementation 'ch.interlis:ili2c-core:5.6.3'
     implementation 'ch.interlis:iox-ili:1.23.4'
-    implementation ('io.github.sogis:iliprettyprint:0.0.78') {
-        exclude group: 'ch.interlis', module: 'umleditor'
-    }
-    //implementation name: 'sebase'
-    //implementation name: 'jhotdraw53'
-    //implementation name: 'XMIFramework'
-    //implementation name: 'umleditor-3.10.3'
-    implementation fileTree(dir: 'lib', include: ['*.jar'])
     
     implementation 'org.apache.lucene:lucene-core:8.11.4' // 9.9.2 scheint die letzte zu sein, ohne Foreign Memory API
     implementation('org.apache.lucene:lucene-queryparser:8.11.4') {

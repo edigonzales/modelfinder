@@ -17,8 +17,9 @@
                 <col />
                 <col style="width: 12%"/>
                 <col style="width: 12%"/>
-                <col style="width: 12%" />
-                <col style="width: 12%" />
+                <col style="width: 10%"/>
+                <col style="width: 10%" />
+                <col style="width: 10%" />
             </colgroup>
             <thead>
             <tr>
@@ -27,6 +28,7 @@
                 <th>Version</th>
                 <th>ILI-Version</th>
                 <th>Detail</th>
+                <th>UML</th>
                 <th>Datei</th>
             </tr>
             </thead>
@@ -40,6 +42,11 @@
                     <td>
                         <a href="modelmetadata?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}" target="_blank">
                             <i class="bi bi-info-circle" style="font-size: 1.2rem;"></i>                        
+                        </a>
+                    </td>
+                    <td>
+                        <a href="uml?serverUrl=${metadata.serverUrl()}&file=${metadata.file()}" target="_blank">
+                            <i class="bi bi-file-earmark-code" style="font-size: 1.2rem;"></i>                        
                         </a>
                     </td>
                     <td>

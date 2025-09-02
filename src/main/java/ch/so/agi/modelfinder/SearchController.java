@@ -1,12 +1,10 @@
 package ch.so.agi.modelfinder;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
-
-import ch.so.agi.umleditor.UmlDiagramVendor;
-import ch.so.agi.umleditor.UmlEditorUtility;
 
 @RestController
 public class SearchController {
@@ -93,8 +88,8 @@ public class SearchController {
         return mav;
     }
     
-    @GetMapping(path = "/uml", produces = "text/html")
-    public String getUmlAsHtml(
+    @GetMapping(path = "/uml-embedded", produces = "text/html")
+    public String getEmbeddedUml(
             @RequestParam(value = "serverUrl", required = false) String serverUrl, 
             @RequestParam(value = "file", required = false) String file, 
             Model model
@@ -120,7 +115,6 @@ public class SearchController {
                     htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
                 } else {
                     String mermaidString = umlDiagram;    
-                    log.info(mermaidString);
                     htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
                 }
             } catch (IOException e) {
@@ -131,4 +125,46 @@ public class SearchController {
         
         return htmlString;
     }
+    
+    @GetMapping(path = "/uml", produces = "text/html")
+    public ModelAndView getPageUml(
+            @RequestParam(value = "serverUrl", required = false) String serverUrl, 
+            @RequestParam(value = "file", required = false) String file, 
+            Model model
+            ) {
+
+        ModelMetadata modelMetadata = null;
+        if ((serverUrl != null && !serverUrl.isEmpty()) && (file != null && !file.isEmpty())) {
+            modelMetadata = searchService.getDocumentById(serverUrl, file).orElse(null);
+        }
+        
+        String htmlString = "";
+        if (modelMetadata == null) {
+            htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
+        } else {
+            try {
+                Path tempDir = Files.createTempDirectory("uml_");
+                Path iliFile = tempDir.resolve(modelMetadata.name()+".ili");                
+                Files.write(iliFile, modelMetadata.modelContent().getBytes());
+                
+                String umlDiagram = umlMermaidService.create(iliFile);
+                
+                if (umlDiagram == null) {
+                   //htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
+                    htmlString = "could not create uml";
+                } else {
+                    String mermaidString = umlDiagram;    
+                    htmlString = mermaidString;//.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                htmlString = "could not create uml";
+            }
+        }
+        
+        ModelAndView mav = new ModelAndView("uml");
+        mav.addObject("mermaidString", htmlString);
+        return mav;
+    }
+
 }
