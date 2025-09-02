@@ -56,10 +56,12 @@ public final class Ili2Mermaid {
     final String displayName;      // shown inside Mermaid class block (without package)
     final Set<String> stereotypes; // e.g. Abstract, Structure, Enumeration, External
     final List<String> attributes; // lines like: name[1] : TypeName
+    final List<String> methods;
 
     Node(String fqn, String displayName, Set<String> stereotypes) {
       this.fqn = fqn; this.displayName = displayName; this.stereotypes = stereotypes;
       this.attributes = new ArrayList<>();
+      this.methods = new ArrayList<>();
     }
   }
 
@@ -119,10 +121,11 @@ public final class Ili2Mermaid {
               // Model-level (outside any topic): classes/structures/assocs
               collectViewablesInContainer(d, lastModelSet, m, m);
               collectDomains(d, lastModelSet, m, m);
+              collectFunctions(d, m, m);
           }
-
+          
           // 4) Second pass: inheritance edges and external parents
-          for (Node n : d.nodes.values()) {
+          for (Node n : new ArrayList<>(d.nodes.values())) {
               Object def = lookupDefinition(td, n.fqn); // our fqn uses names only; we best-effort map back
               if (def instanceof Table tbl) {
                   Element extEl = tbl.getExtending();
@@ -156,15 +159,27 @@ public final class Ili2Mermaid {
               collectAssociations(d, lastModelSet, m, m);
           }
 
-//          // Sort edges deterministically
-//          d.inheritances.sort(Comparator.comparing((Inheritance i) -> i.subFqn).thenComparing(i -> i.supFqn));
-//          d.assocs.sort(Comparator.comparing((Assoc a) -> a.leftFqn).thenComparing(a -> a.rightFqn)
-//                  .thenComparing(a -> a.label == null ? "" : a.label));
+          // Sort edges deterministically
+          d.inheritances.sort(Comparator.comparing((Inheritance i) -> i.subFqn).thenComparing(i -> i.supFqn));
+          d.assocs.sort(Comparator.comparing((Assoc a) -> a.leftFqn).thenComparing(a -> a.rightFqn)
+                  .thenComparing(a -> a.label == null ? "" : a.label));
           
           return d;
       }
 
     // ── collection helpers ────────────────────────────────────────────────────
+
+    private void collectFunctions(Diagram d, Model m, Container container) {
+        String namespace = (container instanceof Topic) ? m.getName() + "::" + container.getName() : "<root>";
+        Namespace ns = d.getOrCreateNamespace(namespace);
+        for (ch.interlis.ili2c.metamodel.Function f : getElements(container,
+                ch.interlis.ili2c.metamodel.Function.class)) {
+            String fqn = fqnOf(m, container, f);
+            Node node = d.nodes.computeIfAbsent(fqn, k -> new Node(k, f.getName(), setOf("Function")));
+            node.stereotypes.add("Function");
+            ns.nodeOrder.add(fqn);
+        }
+    }
 
     private void collectViewablesInContainer(Diagram d, Set<Model> lastModelSet, Model m, Container container) {
         String namespace = (container instanceof Topic)
@@ -178,22 +193,32 @@ public final class Ili2Mermaid {
           // associations handled later to ensure endpoints/nodes exist first
           continue;
         }
-        if (v instanceof Table tbl) {
-          String fqn = fqnOf(m, container, tbl);
+        if (v instanceof Viewable vw) {
+          String fqn = fqnOf(m, container, vw);
           Set<String> stereos = new LinkedHashSet<>();
-          if (tbl.isAbstract()) stereos.add("Abstract");
-          if (!tbl.isIdentifiable()) stereos.add("Structure");
-          Node node = d.nodes.computeIfAbsent(fqn, k -> new Node(k, tbl.getName(), stereos));
+          if (vw.isAbstract()) stereos.add("Abstract");
+          if (vw instanceof Table t) {
+              if (!t.isIdentifiable()) stereos.add("Structure");              
+          } else {
+              stereos.add("View");
+          }
+          Node node = d.nodes.computeIfAbsent(fqn, k -> new Node(k, vw.getName(), stereos));
           node.stereotypes.addAll(stereos);
 
           // attributes          
-          for (AttributeDef a : getElements(tbl, AttributeDef.class)) {
+          for (AttributeDef a : getElements(vw, AttributeDef.class)) {
             String card = formatCardinality(a.getCardinality());
             String typeName = TypeNamer.nameOf(a);
             node.attributes.add(a.getName() + "[" + card + "] : " + typeName);
           }
+          
+          int ci = 1;
+          for (Constraint c : getElements(vw, Constraint.class)) {
+              String cname = (c.getName() != null && !c.getName().isEmpty()) ? c.getName() : ("constraint" + ci++);
+              node.methods.add(cname + "()");
+          }
           ns.nodeOrder.add(fqn);
-        }
+        } 
       }
     }
 
@@ -353,20 +378,20 @@ public final class Ili2Mermaid {
                   printClassBlock(sb, n, "  ");
               }
           }
-//
-//          // 3) Inheritance edges
-//          for (Inheritance i : d.inheritances) {
-//              sb.append("  ").append(id(i.subFqn)).append(" --|> ").append(id(i.supFqn)).append("\n");;
-//          }
-//
-//          // 4) Associations with cardinalities on both ends
-//          for (Assoc a : d.assocs) {
-//              sb.append("  ").append(id(a.leftFqn)).append(" \"").append(a.leftCard).append("\" -- \"")
-//                      .append(a.rightCard).append("\" ").append(id(a.rightFqn));
-//              if (a.label != null && !a.label.isEmpty())
-//                  sb.append(" : ").append(escape(a.label));
-//              sb.append("\n");
-//          }
+
+          // 3) Inheritance edges
+          for (Inheritance i : d.inheritances) {
+              sb.append("  ").append(id(i.subFqn)).append(" --|> ").append(id(i.supFqn)).append("\n");;
+          }
+
+          // 4) Associations with cardinalities on both ends
+          for (Assoc a : d.assocs) {
+              sb.append("  ").append(id(a.leftFqn)).append(" \"").append(a.leftCard).append("\" -- \"")
+                      .append(a.rightCard).append("\" ").append(id(a.rightFqn));
+              if (a.label != null && !a.label.isEmpty())
+                  sb.append(" : ").append(escape(a.label));
+              sb.append("\n");
+          }
 
           return sb.toString();
       }
@@ -383,6 +408,9 @@ public final class Ili2Mermaid {
           }
           for (String attr : n.attributes) {
               sb.append(indent).append("  ").append(escape(attr)).append("\n");
+          }
+          for (String m : n.methods) {
+              sb.append(indent).append("  ").append(escape(m)).append("\n");
           }
           sb.append(indent).append("}\n");
       }

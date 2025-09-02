@@ -18,7 +18,7 @@ import ch.interlis.ili2c.metamodel.TransferDescription;
 public class UmlMermaidService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public Path create(Path iliFile) {
+    public String create(Path iliFile) {
         Configuration config = new Configuration();
         config.addFileEntry(new FileEntry(iliFile.toFile().getAbsolutePath(), FileEntryKind.ILIMODELFILE));
         config.setGenerateWarnings(false);
@@ -32,8 +32,6 @@ public class UmlMermaidService {
         
         String umlDiagram = Ili2Mermaid.render(td);
         
-        System.err.println(umlDiagram);
-        
-        return null;
+        return umlDiagram;
     }
 }

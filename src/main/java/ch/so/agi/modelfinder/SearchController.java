@@ -114,17 +114,15 @@ public class SearchController {
                 Path iliFile = tempDir.resolve(modelMetadata.name()+".ili");                
                 Files.write(iliFile, modelMetadata.modelContent().getBytes());
                 
-                Path umlFile = umlMermaidService.create(iliFile);
+                String umlDiagram = umlMermaidService.create(iliFile);
                 
-//                Path umlFile = UmlEditorUtility.createUmlDiagram(iliFile, null, tempDir, UmlDiagramVendor.MERMAID);
-//                
-//                if (umlFile == null) {
-//                    htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
-//                } else {
-//                    String mermaidString = Files.readString(umlFile);    
-//                    //log.info(mermaidString);
-//                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
-//                }
+                if (umlDiagram == null) {
+                    htmlString = "<pre class=\"mermaid\">could not create uml</pre>";
+                } else {
+                    String mermaidString = umlDiagram;    
+                    log.info(mermaidString);
+                    htmlString = "<pre class=\"mermaid\">\n"+mermaidString.replace("<<", "&#60;&#60;").replace(">>", "&#62;&#62;")+"</pre>";
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 htmlString = "<pre class=\"mermaid\">could not create uml</pre>";

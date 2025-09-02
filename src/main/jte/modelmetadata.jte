@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
     <script src="prism-interlis.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
     <script>
 
         // Initialize Mermaid
