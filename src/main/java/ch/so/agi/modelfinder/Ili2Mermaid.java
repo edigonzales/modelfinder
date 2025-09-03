@@ -209,7 +209,9 @@ public final class Ili2Mermaid {
           for (AttributeDef a : getElements(vw, AttributeDef.class)) {
             String card = formatCardinality(a.getCardinality());
             String typeName = TypeNamer.nameOf(a);
-            node.attributes.add(a.getName() + "[" + card + "] : " + typeName);
+            if (!typeName.equalsIgnoreCase("ObjectType")) {
+                node.attributes.add(a.getName() + "[" + card + "] : " + typeName);
+            } 
           }
           
           int ci = 1;
@@ -434,46 +436,42 @@ public final class Ili2Mermaid {
         //Type t = a.getDomainResolvingAliases();
         Type t = a.getDomain();
       if (t == null) return "<Unknown>";
-
-      // Show referenced structure/class names, or base type names where sensible.
-      if (t instanceof ReferenceType ref) {
+      if (t instanceof ObjectType obj) {
+          return "ObjectType";
+      } else if (t instanceof ReferenceType ref) {
         AbstractClassDef target = ref.getReferred();
         if (target != null) return target.getName();
-      }
-      if (t instanceof CompositionType comp) {
+      } else if (t instanceof CompositionType comp) {
         AbstractClassDef target = comp.getComponentType();
         if (target != null) return target.getName();
-      }
-//      if (t instanceof DomainType domType) {
-//        Domain base = domType.getDomain();
-//        if (base != null) return base.getName();
-//      }
-
-      // Fallbacks for common geometry and primitive types
-      if (t instanceof SurfaceType) return "MultiSurface"; 
-      if (t instanceof AreaType) return "Area";
-      if (t instanceof LineType) return "Polyline";
-      if (t instanceof CoordType) {
+      } else if (t instanceof SurfaceType) {
+          return "Surface"; 
+      } else if (t instanceof MultiSurfaceType) {
+          return "MultiSurface"; 
+      } else if (t instanceof AreaType) {
+          return "Area";
+      } else if (t instanceof MultiAreaType) {
+          return "MultiArea";
+      } else if (t instanceof PolylineType) {
+          return "Polyline";
+      } else if (t instanceof MultiPolylineType) {
+          return "MultiPolyline";
+      } else if (t instanceof CoordType) {
           NumericalType[] nts = ((CoordType) t).getDimensions();
           return "Coord" + nts.length;
-      }
-      if (t instanceof NumericType) return "Numeric";
-      if (t instanceof TextType) {
-//          TextType tt = (TextType) t;
-//          if (tt.getContainer() != null) {
-//              return tt.getContainer().getName();
-//          }
-          
+      } else if (t instanceof MultiCoordType) {
+          NumericalType[] nts = ((MultiCoordType) t).getDimensions();
+          return "MultiCoord" + nts.length;
+      } else if (t instanceof NumericType) {
+          return "Numeric";
+      } else if (t instanceof TextType) {
           return "String";
-      }
-      if (t instanceof EnumerationType) {
+      } else if (t instanceof EnumerationType) {
           return a.isDomainBoolean() ? "Boolean" : a.getContainer().getName();
-      }
-      if (t instanceof FormattedType && isDateOrTime((FormattedType) t)) {
+      } else if (t instanceof FormattedType && isDateOrTime((FormattedType) t)) {
           FormattedType ft = (FormattedType) t;
           return ft.getDefinedBaseDomain().getName();
-      }
-      if (t instanceof TextOIDType) {
+      } else if (t instanceof TextOIDType) {
           TextOIDType tt = (TextOIDType) t;
           Type textOidType = tt.getOIDType();
           if(textOidType instanceof TypeAlias) {
@@ -481,7 +479,7 @@ public final class Ili2Mermaid {
           } else {
               return textOidType.getName();
           }
-      } if (t instanceof TypeAlias) {
+      } else if (t instanceof TypeAlias) {
           TypeAlias ta = (TypeAlias) t;
           ta.getScopedName();
           return ta.getAliasing().getName();
