@@ -34,7 +34,7 @@
                     hx-trigger="input keyup changed delay:300ms"
                     hx-headers='{"Accept": "text/html"}' 
                     autocomplete="off" 
-                    placeholder="Search for INTERLIS models..." />
+                    placeholder="Search for INTERLIS models..." autofocus/>
                     <span class="clear-icon" hx-on:click="document.querySelector('#search-input').value = ''; htmx.trigger('#search-input', 'input');"><i class="bi bi-x" style="color: #333; font-size:1.2rem;"></i></span>
             </div>     
         </div>
