@@ -16,6 +16,7 @@
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/prismjs/components/prism-core.min.js"></script>
     <script src="https://unpkg.com/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/prismjs/plugins/line-highlight/prism-line-highlight.min.js"></script>
     <script src="prism-interlis.js"></script>
         
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
@@ -37,6 +38,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/prismjs/themes/prism.css">
     <link rel="stylesheet" href="https://unpkg.com/prismjs/plugins/line-numbers/prism-line-numbers.css">
+    <link rel="stylesheet" href="https://unpkg.com/prismjs/plugins/line-highlight/prism-line-highlight.css">
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="modelfinder.css">
 </head>
@@ -153,7 +155,7 @@
         <div class="textedit-container">
             <label class="textedit-label">Model</label>
             <div class="textedit-display textedit-display-area" style="overflow-y: auto;">
-                <pre style="font-size: 0.9rem;" class="line-numbers"><code class="language-interlis">${metadata.modelContent()}</code></pre>          
+                <pre id="model-code" style="font-size: 0.9rem;" class="line-numbers linkable-line-numbers"><code class="language-interlis">${metadata.modelContent()}</code></pre>          
             </div>
         </div>
         
