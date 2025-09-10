@@ -3,6 +3,7 @@ package ch.so.agi.modelfinder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +99,7 @@ public class SearchController {
         ModelMetadata modelMetadata = null;
         if ((serverUrl != null && !serverUrl.isEmpty()) && (file != null && !file.isEmpty())) {
             modelMetadata = searchService.getDocumentById(serverUrl, file).orElse(null);
-        }
+        }  
         
         String htmlString = "";
         if (modelMetadata == null) {
@@ -137,6 +138,13 @@ public class SearchController {
         if ((serverUrl != null && !serverUrl.isEmpty()) && (file != null && !file.isEmpty())) {
             modelMetadata = searchService.getDocumentById(serverUrl, file).orElse(null);
         }
+        
+//        String path = "/Users/stefan/tmp/foo.ili";
+//        try {
+//            Files.write(Paths.get(path), modelMetadata.modelContent().getBytes());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         
         String htmlString = "";
         if (modelMetadata == null) {

@@ -1,9 +1,10 @@
 package ch.so.agi.modelfinder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -123,22 +124,23 @@ public class RemoteReaderService {
         return organisation;
     }
     
-    private String readUrlToString(String urlString) {
-        StringBuilder content = new StringBuilder();
+    public String readUrlToString(String urlString) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlString)).GET().build();
+
+        HttpResponse<String> resp = null;
         try {
-            URL url = new URL(urlString);
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                    content.append(System.lineSeparator()); // Add back line separators
-                }
-            }
-        } catch (IOException e) {
+            resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             log.error("Error reading URL: " + urlString + " - " + e.getMessage());
             return null;
+
         }
-        return content.toString();
+        if (resp.statusCode() != 200) {
+            log.error("Error reading URL: " + urlString + " - Status code: "+ resp.statusCode());
+            return null;
+        }
+        return resp.body();
     }
 }
