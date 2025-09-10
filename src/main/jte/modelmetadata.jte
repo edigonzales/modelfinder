@@ -14,9 +14,10 @@
     <title>${metadata.name()} • INTERLIS Model Finder • Kanton Solothurn</title>
     
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://unpkg.com/prismjs/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="prism-interlis.js"></script>
-    
+        
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.10.1/dist/mermaid.min.js"></script>
     <script>
 
@@ -34,7 +35,8 @@
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css" />
+    <link rel="stylesheet" href="https://unpkg.com/prismjs/themes/prism.css">
+    <link rel="stylesheet" href="https://unpkg.com/prismjs/plugins/line-numbers/prism-line-numbers.css">
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="modelfinder.css">
 </head>
@@ -151,7 +153,7 @@
         <div class="textedit-container">
             <label class="textedit-label">Model</label>
             <div class="textedit-display textedit-display-area" style="overflow-y: auto;">
-                <pre style="line-height: 1.52; font-size: 0.9rem;"><code class="language-interlis">${metadata.modelContent()}</code></pre>          
+                <pre style="font-size: 0.9rem;" class="line-numbers"><code class="language-interlis">${metadata.modelContent()}</code></pre>          
             </div>
         </div>
         
