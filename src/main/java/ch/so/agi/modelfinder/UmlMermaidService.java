@@ -31,7 +31,7 @@ public class UmlMermaidService {
         TransferDescription td = ch.interlis.ili2c.Main.runCompiler(config, settings);
         
         String umlDiagram = Ili2Mermaid.render(td);
-        
+
         return umlDiagram;
     }
 }

@@ -38,6 +38,7 @@ ${mermaidString}
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'loose',
+      maxTextSize: 1000000,
 
       // 1) Ask Mermaid not to force max-width on diagrams
       flowchart: { useMaxWidth: false },

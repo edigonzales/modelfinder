@@ -21,7 +21,7 @@
     <script>
 
         // Initialize Mermaid
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({ startOnLoad: true, maxTextSize: 1000000 });
 
         // Wait for the DOM to be ready before running the code
         document.addEventListener('DOMContentLoaded', function() {
